@@ -8,6 +8,14 @@ import firefliesVertexShader from './shaders/fireflies/vertex.glsl';
 import firefliesFragmentShader from './shaders/fireflies/fragment.glsl';
 import portalVertexShader from './shaders/portal/vertex.glsl';
 import portalFragmentShader from './shaders/portal/fragment.glsl';
+import Stats from 'three/examples/jsm/libs/stats.module';
+
+/**
+ * Stats
+ */
+const stats = new Stats();
+stats.showPanel(0);
+document.body.appendChild(stats.dom);
 
 /** 
  * Base 
@@ -195,6 +203,7 @@ const renderer = new THREE.WebGLRenderer({
 });
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.outputEncoding = THREE.sRGBEncoding;
 
 debugObject.clearColor = '#201919';
 renderer.setClearColor(debugObject.clearColor);
@@ -226,6 +235,8 @@ const tick = () =>
  
     // Call tick again on the next frame 
     window.requestAnimationFrame(tick);
+
+    stats.update();
 } 
  
 tick();
