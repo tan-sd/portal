@@ -10,5 +10,10 @@
   },
   "devDependencies": {
     "vite": "^4.3.9"
+  },
+  "dependencies": {
+    "dat.gui": "^0.7.9",
+    "three": "^0.122.0",
+    "vite-plugin-glsl": "^1.1.2"
   }
 }
