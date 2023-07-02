@@ -25,3 +25,4 @@ shaders
 *.njsproj
 *.sln
 *.sw?
+.vercel
