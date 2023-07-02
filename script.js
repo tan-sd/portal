@@ -9,6 +9,15 @@ import firefliesFragmentShader from './shaders/fireflies/fragment.glsl';
 import portalVertexShader from './shaders/portal/vertex.glsl';
 import portalFragmentShader from './shaders/portal/fragment.glsl';
 
+/** 
+ * Base 
+ */ 
+// Debug 
+const debugObject = {};
+const gui = new dat.GUI({ 
+    width: 400 
+})
+
 // Canvas 
 const canvas = document.querySelector('canvas.webgl');
  
@@ -90,6 +99,8 @@ const firefliesMaterial = new THREE.ShaderMaterial({
   depthWrite: false,
 })
 
+gui.add(firefliesMaterial.uniforms.uSize, 'value').min(0).max(300).step(1).name('firefliesSize');
+
 // Points
 const fireflies = new THREE.Points(firefliesGeometry, firefliesMaterial);
 scene.add(fireflies);
@@ -119,6 +130,21 @@ const portalLightMaterial = new THREE.ShaderMaterial({
   },
   vertexShader: portalVertexShader,
   fragmentShader: portalFragmentShader
+})
+
+debugObject.portalColorStart = '#000000';
+debugObject.portalColorEnd = '#ffffff';
+
+gui
+  .addColor(debugObject, 'portalColorStart')
+  .onChange(() => {
+    portalLightMaterial.uniforms.uColorStart.value.set(debugObject.portalColorStart)
+  })
+
+gui
+  .addColor(debugObject, 'portalColorEnd')
+  .onChange(() => {
+    portalLightMaterial.uniforms.uColorEnd.value.set(debugObject.portalColorEnd)
 })
 
 /** 
@@ -170,6 +196,16 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
+debugObject.clearColor = '#201919';
+renderer.setClearColor(debugObject.clearColor);
+
+gui
+  .addColor(debugObject, 'clearColor')
+  .name('backgroundColor')
+  .onChange(() => {
+    renderer.setClearColor(debugObject.clearColor)
+  })
+
 /** 
  * Animate 
  */ 
@@ -179,6 +215,9 @@ const tick = () =>
 { 
     const elapsedTime = clock.getElapsedTime();
  
+    firefliesMaterial.uniforms.uTime.value = elapsedTime;
+    portalLightMaterial.uniforms.uTime.value = elapsedTime;
+
     // Update controls 
     controls.update();
  
